@@ -60,12 +60,9 @@ class Linea{
 	method realizar(consumo){
 		plan.validarPuedeRealizar(consumo, packs)
 		consumos.add(consumo)
-		self.consumirPack(consumo)
-	}	
-	method consumirPack(consumo){
-		self.ultPackQueSatisfaga(consumo).consumir(consumo)
+		plan.consumirPack(consumo, self.ultPackQueSatisfaga(consumo))
 	}
-	
+
 	method ultPackQueSatisfaga(consumo) =
 		packs.reverse().find({pack=> pack.puedeSatisfacer(consumo) })
 
@@ -75,13 +72,22 @@ class Linea{
 	}
 }
 //Planes
-class Plan{
+class Plan{		
+	
+	var property deuda = 0
+	
+	method sumarDeuda(costo){	deuda =+ costo	}
+	
 	method validarPuedeRealizar(consumo, packs){
 		if (not self.tieneUnPackQueSatifaga(consumo, packs))
 			throw new DomainException(message = "no hay pack vigente que satisfaga completamente el consumo")
 	}	
 	
 	method tieneUnPackQueSatifaga(consumo, packs) = packs.any({pack => pack.puedeSatisfacer(consumo) }) 
+	
+	method consumirPack(consumo, pack){
+		pack.consumir(consumo)
+	}
 	
 }
 const comun = new Plan()
@@ -128,7 +134,7 @@ class Pack{
 	
 	// punto 6
 	method consumir(consumo) {
-		cantidadPack =- tipoPack.gasto(consumo)
+		cantidadPack = cantidadPack - tipoPack.gasto(consumo)
 	} 
 	
 	//punto 7
@@ -190,26 +196,23 @@ object internetIlimitadoFindes{
 object ilimitado{}
 
 
-class LineaBlack inherits Linea{
-	var property deuda = 0
+class LineaBlack inherits Plan{
 	
-	override method validarPuedeRealizar(consumo){
-		if (not self.tieneUnPackQueSatifaga(consumo)){
+	override method validarPuedeRealizar(consumo, packs){
+		if (not self.tieneUnPackQueSatifaga(consumo, packs)){
 			
 			self.sumarDeuda( consumo.costo())
 			throw new DomainException(message = "no hay pack que satisfaga el consumo, su costo fue agregado a la deuda!")
 		}
 	}
-	
-	method sumarDeuda(costo){
-		deuda =+ costo
-	}
+
 	
 }
 
 
-class LineaPlatinum inherits Linea{
-	
+class LineaPlatinum inherits Plan{
+	override method validarPuedeRealizar(consumo, packs){}	// no tiene ninguna condicion ni restriccion por lo q simplemente producira el efecto del consumo sin gastar lso packs
+		
 }
  /*
  * 
