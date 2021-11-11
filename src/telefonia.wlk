@@ -189,7 +189,7 @@ object internetIlimitadoFindes{
 object ilimitado{}
 
 
-class LineaBlack inherits Plan{
+object black inherits Plan{
 	
 	override method validarPuedeRealizar(consumo, packs){
 		if (not self.tieneUnPackQueSatifaga(consumo, packs)){
@@ -203,7 +203,7 @@ class LineaBlack inherits Plan{
 }
 
 
-class LineaPlatinum inherits Plan{
+object platinum inherits Plan{
 	override method validarPuedeRealizar(consumo, packs){}	// no tiene ninguna condicion ni restriccion por lo q simplemente producira el efecto del consumo sin gastar lso packs
 		
 }
