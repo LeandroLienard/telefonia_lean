@@ -49,13 +49,6 @@ class Linea{
 	method agregarPack(pack){
 		packs.add(pack)
 	}
-	// punto 5
-/*	method validarPuedeRealizar(consumo){
-		if (not self.tieneUnPackQueSatifaga(consumo))
-			throw new DomainException(message = "no hay pack vigente que satisfaga completamente el consumo")
-	}
-*/
-	
 	// punto 6
 	method realizar(consumo){
 		plan.validarPuedeRealizar(consumo, packs)
@@ -154,7 +147,7 @@ object credito {
 	method gasto(consumo) = consumo.costo()
 }
 
-const megasLibre = new PackMegas()	// objeto usado polimorficamente
+const megasLibres = new PackMegas()	// objeto usado polimorficamente
 
 class PackMegas{					// clase intermedia usada para no repetir logica punto 7
 	const property serviciosCubiertos = [internet]
